@@ -1,25 +1,14 @@
-FROM debian:jessie
+# A basic apache server. To use either add or bind mount content under /var/www
+FROM ubuntu:12.04
 
-# install curl
-RUN apt-get update && apt-get install -qy curl
+MAINTAINER Kimbro Staken version: 0.1
 
-# install go runtime
-RUN curl -s https://storage.googleapis.com/golang/go1.2.2.linux-amd64.tar.gz | tar -C /usr/local -xz
+RUN apt-get update && apt-get install -y apache2 && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# prepare go environment
-ENV GOPATH /go
-ENV GOROOT /usr/local/go
-ENV PATH $PATH:/usr/local/go/bin:/go/bin
-
-# add the current build context
-ADD . /go/src/github.com/deis/helloworld
-
-# compile the binary
-RUN cd /go/src/github.com/deis/helloworld && go install -v .
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
 
 EXPOSE 80
 
-ENTRYPOINT ["/go/bin/helloworld"]
-
-
-# Example for test the jenkisfile
+CMD ["/usr/sbin/apache2", "-D", "FOREGROUND"]

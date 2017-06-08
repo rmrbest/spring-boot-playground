@@ -32,4 +32,9 @@ node {
             app.push("latest")
         }
     }
+
+    stage('Deploy to Kubernetes') {
+        sh 'echo Deploying to Kubernetes'
+        sh 'kubectl --kubeconfig /home/config create -f k8s.blocks/deployment.yml'        
+    }
 }

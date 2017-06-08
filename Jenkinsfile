@@ -37,4 +37,8 @@ node {
         sh 'echo Deploying to Kubernetes'
         sh 'kubectl --kubeconfig /home/config create -f k8s.blocks/deployment.yml'        
     }
+    
+    stage('Creating service on Kubernetes') {
+        sh 'kubectl --kubeconfig /home/config create -f k8s.blocks/services.yml'
+    }
 }
